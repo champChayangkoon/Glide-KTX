@@ -1,0 +1,95 @@
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+
+group = 'com.chayangkoon.champ'
+version = version_name
+
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.sourceFiles
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.compile
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    archiveClassifier.set('javadoc')
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+Properties properties = new Properties()
+properties.load(new FileInputStream("local.properties"))
+
+// Bintray
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    publications = ['Release']
+    publish = true
+
+    pkg {
+        repo = 'OtherKTX'
+        name = 'com.chayangkoon.champ.glide.ktx'
+        desc = 'A set of kotlin extensions for Glide image loader library.'
+        labels = ['kotlin', 'kotlin-extensions', 'glide-extensions', 'glide-library']
+        websiteUrl = 'https://github.com/champChayangkoon/Glide-KTX'
+        issueTrackerUrl = 'https://github.com/champChayangkoon/Glide-KTX/issues'
+        vcsUrl = 'https://github.com/champChayangkoon/Glide-KTX.git'
+        licenses = ["Apache-2.0"]
+        attributes = ['maturity': 'Stable']
+        publicDownloadNumbers = true
+        override = true
+        version {
+            name = this.version
+            desc = "Version ${this.version}"
+            released = new Date()
+            vcsTag = "LinkPreview-${this.version}"
+        }
+    }
+}
+
+// publishing
+afterEvaluate {
+    publishing {
+        publications {
+            Release(MavenPublication) {
+                from components.release
+                artifact androidJavadocsJar
+                artifact androidSourcesJar
+                pom {
+                    packaging = 'aar'
+                    groupId = 'com.chayangkoon.champ'
+                    artifactId = 'glide-ktx'
+                    name = 'Glide-KTX'
+                    description 'A set of kotlin extensions for Glide image loader library.'
+                    url = 'https://github.com/champChayangkoon/Glide-KTX'
+
+                    licenses {
+                        license {
+                            name = 'The Apache Software License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'champchayangkoon'
+                            name = 'Chayangkoon Tirawanon'
+                            email = 'champ@chayangkoon@gmail.com'
+                        }
+                    }
+
+                    scm {
+                        connection = 'https://github.com/champChayangkoon/Glide-KTX.git'
+                        developerConnection = 'https://github.com/champChayangkoon/Glide-KTX.git'
+                        url = 'https://github.com/champChayangkoon/Glide-KTX'
+                    }
+                }
+            }
+        }
+    }
+}

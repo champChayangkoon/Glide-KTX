@@ -1,0 +1,3 @@
+include ':glide-ktx'
+include ':app'
+rootProject.name = "GlideKTXExample"
