@@ -10,8 +10,10 @@ dependencies {
 ```
 And add below codes to your root project's build.gradle file:
 ```groovy
-repositories {
-    jcenter()
+allprojects {
+    repositories {
+        jcenter()
+    }
 }
 ```
 ## Basic Usage
