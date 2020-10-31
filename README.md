@@ -72,7 +72,7 @@ To load an image on background Thread, You can use submit() and then use `getOnC
 ```kotlin
 val futureTarget: FutureTarget<Bitmap> = Glide.with(this)
     .asBitmap()
-    .load(https://www.example.com/image.jpg)
+    .load("https://www.example.com/image.jpg")
     .submit()
 
 coroutineScope.launch {
