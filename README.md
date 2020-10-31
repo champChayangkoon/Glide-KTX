@@ -2,9 +2,17 @@
 A set of kotlin extensions for Glide image loader library.
 
 ## Gradle
-Add dependencies : 
+Add a dependency code to your module's build.gradle file:
 ```groovy
-implementation 'com.chayangkoon.champ:glide-ktx:1.0.0'
+dependencies {
+    implementation 'com.chayangkoon.champ:glide-ktx:1.0.0'
+}
+```
+And add below codes to your root project's build.gradle file:
+```groovy
+repositories {
+    jcenter()
+}
 ```
 ## Basic Usage
 Load image into an `ImageView` is easy with load extension function:
