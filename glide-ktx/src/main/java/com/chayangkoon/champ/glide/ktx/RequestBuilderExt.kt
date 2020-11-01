@@ -22,9 +22,9 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 /**
- * Sets a [RequestListener] to monitor the resource load with lambda.
+ * Create and sets a new [RequestListener] to monitor the resource load with lambda.
  * Should Use when request only one in class if greater than one should use
- * [makeRequestListener] for make [RequestListener] instead
+ * [createRequestListener] for make [RequestListener] instead
  * and set to all request.
  *
  * [Glide] recommend best way is create a single instance of an exception handler
@@ -71,7 +71,7 @@ inline fun <T> RequestBuilder<T>.listener(
 }
 
 /**
- * Adds a [RequestListener] with lambda. If called multiple times,
+ * Create and adds a new [RequestListener] with lambda. If called multiple times,
  * all passed [RequestListener] will be called in order.
  *
  * @param [T] The type of resource being loaded.
