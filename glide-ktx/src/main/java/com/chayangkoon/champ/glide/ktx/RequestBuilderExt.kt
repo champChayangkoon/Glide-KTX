@@ -184,6 +184,7 @@ inline fun <T> RequestBuilder<T>.intoCustomTarget(
  * @param [T] The type of resource that will be delivered to the [CustomTarget].
  * @param width The requested width (> 0, or == [Target.SIZE_ORIGINAL]).
  * @param height The requested height (> 0, or == [Target.SIZE_ORIGINAL]).
+ * @throws IllegalArgumentException if width/height doesn't meet (> 0, or == [Target.SIZE_ORIGINAL])
  *
  * @param onResourceReady The onResourceReady will be invoked when the resource load has finished.
  * See also {@link Target#onResourceReady([Object], [Transition])}
@@ -227,7 +228,7 @@ inline fun <T> RequestBuilder<T>.intoCustomTarget(
 }
 
 /**
- * Create a new [CustomViewTarget] and to load the resource in its original size
+ * Create a new [CustomViewTarget] and to load the resource with size of view
  * into the CustomViewTarget with lambda.
  *
  * Example :
@@ -244,6 +245,8 @@ inline fun <T> RequestBuilder<T>.intoCustomTarget(
  * @param [T] The specific subclass of view wrapped by this target
  * (e.g. {@link android.widget.ImageView})
  * @param [Z] The resource type this [CustomViewTarget] will receive.
+ *
+ * @param view The view for use determine size for resource
  *
  * @param onResourceReady The onResourceReady will be invoked when the resource load has finished.
  * See also {@link Target#onResourceReady([Object], [Transition])}
