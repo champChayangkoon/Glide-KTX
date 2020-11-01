@@ -82,8 +82,8 @@ internal class RequestBuilderExtTest {
     }
 
     @Test
-    fun `Should return RequestListener when use makeRequestListener method`() {
-        val requestListener = makeRequestListener<Drawable>(
+    fun `Should return RequestListener when use createRequestListener method`() {
+        val requestListener = createRequestListener<Drawable>(
             { resource, model, target, datasource, isFirstResource ->
                 false
             }, { glideException, model, target, isFirstResource ->

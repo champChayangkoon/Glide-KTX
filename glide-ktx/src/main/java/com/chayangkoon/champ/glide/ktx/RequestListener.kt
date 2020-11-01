@@ -9,7 +9,7 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 
 /**
- * Make new [RequestListener] with lambda for use with [Glide].
+ * create a new [RequestListener] with lambda for use with [Glide].
  * [Glide] recommend best way is create a single instance of an exception handler
  * per type of request (usually activity/fragment) rather than
  * pass one in per request to avoid some redundant object allocation.
@@ -24,7 +24,7 @@ import com.bumptech.glide.request.transition.Transition
  *
  * @return The [RequestListener].
  */
-inline fun <R> makeRequestListener(
+inline fun <R> createRequestListener(
     crossinline onResourceReady: (R, Any?, Target<R>?, DataSource?, Boolean) -> Boolean,
     crossinline onLoadFailed: (GlideException?, Any?, Target<R>?, Boolean) -> Boolean
 ): RequestListener<R> {
