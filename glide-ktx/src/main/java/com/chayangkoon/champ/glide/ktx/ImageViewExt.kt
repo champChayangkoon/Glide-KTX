@@ -22,93 +22,107 @@ import java.io.File
 
 /** See also {@link #ImageView.loadAny(
  *                       Any?,
- *                       TransitionOptions<*, Drawable>? = null
+ *                       TransitionOptions<*, Drawable>? = null,
+ *                       RequestOptions? = null
  *                   ): ViewTarget<ImageView, Drawable> loadAnyWithOutRequestOptions}
  */
 @JvmSynthetic
 fun ImageView.load(
     bitmap: Bitmap?,
-    transitionOptions: TransitionOptions<*, Drawable>? = null
+    transitionOptions: TransitionOptions<*, Drawable>? = null,
+    requestOptions: RequestOptions? = null
 ): ViewTarget<ImageView, Drawable> {
-    return loadAny(bitmap, transitionOptions)
+    return loadAny(bitmap, transitionOptions, requestOptions)
 }
 
 /** See also {@link #ImageView.loadAny(
  *                       Any?,
- *                       TransitionOptions<*, Drawable>? = null
+ *                       TransitionOptions<*, Drawable>? = null,
+ *                       RequestOptions? = null
  *                   ): ViewTarget<ImageView, Drawable> loadAnyWithOutRequestOptions}
  */
 @JvmSynthetic
 fun ImageView.load(
     byteArray: ByteArray?,
-    transitionOptions: TransitionOptions<*, Drawable>? = null
+    transitionOptions: TransitionOptions<*, Drawable>? = null,
+    requestOptions: RequestOptions? = null
 ): ViewTarget<ImageView, Drawable> {
-    return loadAny(byteArray, transitionOptions)
+    return loadAny(byteArray, transitionOptions, requestOptions)
 }
 
 /** See also {@link #ImageView.loadAny(
  *                       Any?,
- *                       TransitionOptions<*, Drawable>? = null
+ *                       TransitionOptions<*, Drawable>? = null,
+ *                       RequestOptions? = null
  *                   ): ViewTarget<ImageView, Drawable> loadAnyWithOutRequestOptions}
  */
 @JvmSynthetic
 fun ImageView.load(
     drawable: Drawable?,
-    transitionOptions: TransitionOptions<*, Drawable>? = null
+    transitionOptions: TransitionOptions<*, Drawable>? = null,
+    requestOptions: RequestOptions? = null
 ): ViewTarget<ImageView, Drawable> {
-    return loadAny(drawable, transitionOptions)
+    return loadAny(drawable, transitionOptions, requestOptions)
 }
 
 /** See also {@link #ImageView.loadAny(
  *                       Any?,
- *                       TransitionOptions<*, Drawable>? = null
+ *                       TransitionOptions<*, Drawable>? = null,
+ *                       RequestOptions? = null
  *                   ): ViewTarget<ImageView, Drawable> loadAnyWithOutRequestOptions}
  */
 @JvmSynthetic
 fun ImageView.load(
     @RawRes @DrawableRes resourceId: Int?,
-    transitionOptions: TransitionOptions<*, Drawable>? = null
+    transitionOptions: TransitionOptions<*, Drawable>? = null,
+    requestOptions: RequestOptions? = null
 ): ViewTarget<ImageView, Drawable> {
-    return loadAny(resourceId, transitionOptions)
+    return loadAny(resourceId, transitionOptions, requestOptions)
 }
 
 /** See also {@link #ImageView.loadAny(
  *                       Any?,
- *                       TransitionOptions<*, Drawable>? = null
+ *                       TransitionOptions<*, Drawable>? = null,
+ *                       RequestOptions? = null
  *                   ): ViewTarget<ImageView, Drawable> loadAnyWithOutRequestOptions}
  */
 @JvmSynthetic
 fun ImageView.load(
     uri: Uri?,
-    transitionOptions: TransitionOptions<*, Drawable>? = null
+    transitionOptions: TransitionOptions<*, Drawable>? = null,
+    requestOptions: RequestOptions? = null
 ): ViewTarget<ImageView, Drawable> {
-    return loadAny(uri, transitionOptions)
+    return loadAny(uri, transitionOptions, requestOptions)
 }
 
 /** See also {@link #ImageView.loadAny(
  *                       Any?,
- *                       TransitionOptions<*, Drawable>? = null
+ *                       TransitionOptions<*, Drawable>? = null,
+ *                       RequestOptions? = null
  *                   ): ViewTarget<ImageView, Drawable> loadAnyWithOutRequestOptions}
  */
 @JvmSynthetic
 fun ImageView.load(
     string: String?,
-    transitionOptions: TransitionOptions<*, Drawable>? = null
+    transitionOptions: TransitionOptions<*, Drawable>? = null,
+    requestOptions: RequestOptions? = null
 ): ViewTarget<ImageView, Drawable> {
-    return loadAny(string, transitionOptions)
+    return loadAny(string, transitionOptions, requestOptions)
 }
 
 /** See also {@link #ImageView.loadAny(
  *                       Any?,
- *                       TransitionOptions<*, Drawable>? = null
+ *                       TransitionOptions<*, Drawable>? = null,
+ *                       RequestOptions? = null
  *                   ): ViewTarget<ImageView, Drawable> loadAnyWithOutRequestOptions}
  */
 @JvmSynthetic
 fun ImageView.load(
     file: File?,
-    transitionOptions: TransitionOptions<*, Drawable>? = null
+    transitionOptions: TransitionOptions<*, Drawable>? = null,
+    requestOptions: RequestOptions? = null
 ): ViewTarget<ImageView, Drawable> {
-    return loadAny(file, transitionOptions)
+    return loadAny(file, transitionOptions, requestOptions)
 }
 
 /**
@@ -126,11 +140,15 @@ fun ImageView.load(
 @JvmSynthetic
 fun ImageView.loadAny(
     data: Any?,
-    transitionOptions: TransitionOptions<*, Drawable>? = null
+    transitionOptions: TransitionOptions<*, Drawable>? = null,
+    requestOptions: RequestOptions? = null
 ): ViewTarget<ImageView, Drawable> {
     return Glide.with(this)
         .load(data)
-        .apply { transitionOptions?.let { transition(it) } }
+        .apply {
+            transitionOptions?.let { transition(it) }
+            requestOptions?.let { apply(it) }
+        }
         .into(this)
 }
 
