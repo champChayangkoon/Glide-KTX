@@ -14,9 +14,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -24,27 +22,37 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 /**
- * Make new [RequestListener] with lambda for use with [Glide].
+ * Sets a [RequestListener] to monitor the resource load with lambda.
+ * Should Use when request only one in class if greater than one should use
+ * [makeRequestListener] for make [RequestListener] instead
+ * and set to all request.
+ *
  * [Glide] recommend best way is create a single instance of an exception handler
  * per type of request (usually activity/fragment) rather than
  * pass one in per request to avoid some redundant object allocation.
  *
- * @param [R] The type of resource being loaded.
+ * <p>Subsequent calls to this method will replace previously set listeners. To set multiple
+ * listeners, use [addListener] instead.
+ *
+ * @param [T] The type of resource being loaded.
+ *
  * @param onResourceReady The onResourceReady will be invoked when a load completes successfully,
  * immediately before {@link Target#onResourceReady([Object], [Transition])}.
+ *
  * @param onLoadFailed The onLoadFailed will be invoked when an exception occurs during a load,
- * immediately before {@link Target#onLoadFailed([Drawable])}
- * @return The [RequestListener]
+ * immediately before {@link Target#onLoadFailed([Drawable])}.
+ *
+ * @return This [RequestBuilder].
  */
-inline fun <R> makeRequestListener(
-    crossinline onResourceReady: (R, Any?, Target<R>?, DataSource?, Boolean) -> Boolean,
-    crossinline onLoadFailed: (GlideException?, Any?, Target<R>?, Boolean) -> Boolean
-): RequestListener<R> {
-    return object : RequestListener<R> {
+inline fun <T> RequestBuilder<T>.listener(
+    crossinline onResourceReady: (T, Any?, Target<T>?, DataSource?, Boolean) -> Boolean,
+    crossinline onLoadFailed: (GlideException?, Any?, Target<T>?, Boolean) -> Boolean
+): RequestBuilder<T> {
+    return listener(object : RequestListener<T> {
         override fun onResourceReady(
-            resource: R,
+            resource: T,
             model: Any?,
-            target: Target<R>?,
+            target: Target<T>?,
             dataSource: DataSource?,
             isFirstResource: Boolean
         ): Boolean {
@@ -54,12 +62,52 @@ inline fun <R> makeRequestListener(
         override fun onLoadFailed(
             e: GlideException?,
             model: Any?,
-            target: Target<R>?,
+            target: Target<T>?,
             isFirstResource: Boolean
         ): Boolean {
             return onLoadFailed.invoke(e, model, target, isFirstResource)
         }
-    }
+    })
+}
+
+/**
+ * Adds a [RequestListener] with lambda. If called multiple times,
+ * all passed [RequestListener] will be called in order.
+ *
+ * @param [T] The type of resource being loaded.
+ *
+ * @param onResourceReady The onResourceReady will be invoked when a load completes successfully,
+ * immediately before {@link Target#onResourceReady([Object], [Transition])}.
+ *
+ * @param onLoadFailed The onLoadFailed will be invoked when an exception occurs during a load,
+ * immediately before {@link Target#onLoadFailed([Drawable])}.
+ *
+ * @return This [RequestBuilder].
+ */
+inline fun <T> RequestBuilder<T>.addListener(
+    crossinline onResourceReady: (T, Any?, Target<T>?, DataSource?, Boolean) -> Boolean,
+    crossinline onLoadFailed: (GlideException?, Any?, Target<T>?, Boolean) -> Boolean
+): RequestBuilder<T> {
+    return addListener(object : RequestListener<T> {
+        override fun onResourceReady(
+            resource: T,
+            model: Any?,
+            target: Target<T>?,
+            dataSource: DataSource?,
+            isFirstResource: Boolean
+        ): Boolean {
+            return onResourceReady.invoke(resource, model, target, dataSource, isFirstResource)
+        }
+
+        override fun onLoadFailed(
+            e: GlideException?,
+            model: Any?,
+            target: Target<T>?,
+            isFirstResource: Boolean
+        ): Boolean {
+            return onLoadFailed.invoke(e, model, target, isFirstResource)
+        }
+    })
 }
 
 /**
@@ -312,7 +360,7 @@ fun <T> RequestBuilder<T>.intoFlow(
     width: Int = Target.SIZE_ORIGINAL,
     height: Int = Target.SIZE_ORIGINAL
 ): Flow<ImageResult<T>> = callbackFlow {
-    val customTarget : CustomTarget<T> = into(object : CustomTarget<T>(width, height) {
+    val customTarget: CustomTarget<T> = into(object : CustomTarget<T>(width, height) {
         override fun onLoadStarted(placeholder: Drawable?) {
             offer(ImageResult.LoadStarted(placeholder))
         }
