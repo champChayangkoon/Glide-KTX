@@ -82,19 +82,6 @@ internal class RequestBuilderExtTest {
     }
 
     @Test
-    fun `Should return RequestListener when use createRequestListener method`() {
-        val requestListener = createRequestListener<Drawable>(
-            { resource, model, target, datasource, isFirstResource ->
-                false
-            }, { glideException, model, target, isFirstResource ->
-                true
-            }
-        )
-
-        Truth.assertThat(requestListener).isInstanceOf(RequestListener::class.java)
-    }
-
-    @Test
     fun `Should called onResourceReady and return CustomTarget when load resource success with intoCustomTarget`() {
         every {
             requestBuilder.into(any<CustomTarget<Drawable>>())

@@ -62,6 +62,29 @@ internal class ImageViewExtTest {
     }
 
     @Test
+    fun `Should return ViewTarget when use loadAny extension of ImageView with set request options without lambda`() {
+        val url: Any = "www.test.com/image.jpg"
+        val circleCrop = mockk<CircleCrop>()
+        val mockViewTarget = mockk<ViewTarget<ImageView, Drawable>>()
+        every {
+            Glide.with(imageView)
+                .load(url)
+                .apply {
+                    apply(RequestOptions().apply {
+                        transform(circleCrop)
+                    })
+                }
+                .into(imageView)
+        } returns mockViewTarget
+
+        val requestOptions = RequestOptions()
+            .transform(circleCrop)
+
+        val actualViewTarget = imageView.loadAny(url,requestOptions = requestOptions)
+        Truth.assertThat(actualViewTarget).isEqualTo(mockViewTarget)
+    }
+
+    @Test
     fun `Should return ViewTarget when use loadAny extension of ImageView with set request options`() {
         val url: Any = "www.test.com/image.jpg"
         val circleCrop = mockk<CircleCrop>()
