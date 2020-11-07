@@ -18,9 +18,13 @@ import com.bumptech.glide.request.transition.Transition
  *
  * @param onResourceReady The onResourceReady will be invoked when a load completes successfully,
  * immediately before {@link Target#onResourceReady([Object], [Transition])}.
+ * return true if prevent {@link Target#onLoadFailed(Drawable)} from being called on the Target
+ * or false to allow {@link Target#onLoadFailed(Drawable)} to be called on Target.
  *
  * @param onLoadFailed The onLoadFailed will be invoked when an exception occurs during a load,
  * immediately before {@link Target#onLoadFailed([Drawable])}.
+ * return true if prevent {@link Target#onResourceReady([Object], [Transition])}from being called on the Target
+ * or false to allow {@link Target#onResourceReady([Object], [Transition])} to be called on Target.
  *
  * @return The [RequestListener].
  */

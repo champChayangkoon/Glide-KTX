@@ -36,11 +36,29 @@ import kotlin.coroutines.resume
  *
  * @param [T] The type of resource being loaded.
  *
+ * Example :
+ * ```
+ * Glide.with(activity)
+ * .load("https://www.example.com/image.jpg")
+ * .listener({ resource, model, target, datasource, isFirstResource ->
+ *     // handle resource when load success
+ *     return false
+ * }, { exception, model, target, isFirstResource ->
+ *     // handle when load failed
+ *     return true // prevent onLoadFailed from being called on the Target
+ * })
+ * .into(imageView)
+ * ```
+ *
  * @param onResourceReady The onResourceReady will be invoked when a load completes successfully,
  * immediately before {@link Target#onResourceReady([Object], [Transition])}.
+ * return true if prevent {@link Target#onLoadFailed(Drawable)} from being called on the Target
+ * or false to allow {@link Target#onLoadFailed(Drawable)} to be called on Target.
  *
  * @param onLoadFailed The onLoadFailed will be invoked when an exception occurs during a load,
  * immediately before {@link Target#onLoadFailed([Drawable])}.
+ * return true if prevent {@link Target#onResourceReady([Object], [Transition])}from being called on the Target
+ * or false to allow {@link Target#onResourceReady([Object], [Transition])} to be called on Target.
  *
  * @return This [RequestBuilder].
  */
@@ -76,11 +94,29 @@ inline fun <T> RequestBuilder<T>.listener(
  *
  * @param [T] The type of resource being loaded.
  *
+ * Example :
+ * ```
+ * Glide.with(activity)
+ * .load("https://www.example.com/image.jpg")
+ * .addListener({ resource, model, target, datasource, isFirstResource ->
+ *     // handle resource when load success
+ *     return false
+ * }, { exception, model, target, isFirstResource ->
+ *     // handle when load failed
+ *     return true // prevent onLoadFailed from being called on the Target
+ * })
+ * .into(imageView)
+ * ```
+ *
  * @param onResourceReady The onResourceReady will be invoked when a load completes successfully,
  * immediately before {@link Target#onResourceReady([Object], [Transition])}.
+ * return true if prevent {@link Target#onLoadFailed(Drawable)} from being called on the Target
+ * or false to allow {@link Target#onLoadFailed(Drawable)} to be called on Target.
  *
  * @param onLoadFailed The onLoadFailed will be invoked when an exception occurs during a load,
  * immediately before {@link Target#onLoadFailed([Drawable])}.
+ * return true if prevent {@link Target#onResourceReady([Object], [Transition])}from being called on the Target
+ * or false to allow {@link Target#onResourceReady([Object], [Transition])} to be called on Target.
  *
  * @return This [RequestBuilder].
  */
