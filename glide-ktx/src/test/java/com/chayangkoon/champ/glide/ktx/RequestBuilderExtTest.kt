@@ -8,18 +8,18 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.CustomViewTarget
+import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.chayangkoon.champ.glide.ktx.utils.MainCoroutineRule
 import com.google.common.truth.Truth
-import io.mockk.MockKAnnotations
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -68,8 +68,6 @@ internal class RequestBuilderExtTest {
     @MockK
     private lateinit var mockErrorDrawable: Drawable
 
-    private val testCoroutineDispatcher = TestCoroutineDispatcher()
-
     @Before
     fun setup() {
         MockKAnnotations.init(this)
@@ -79,6 +77,74 @@ internal class RequestBuilderExtTest {
     @After
     fun teardown() {
         unmockkStatic(Glide::class)
+    }
+
+    @Test
+    fun `Should called onResourceReady and return RequestBuilder when load resource success with set listener`() {
+        val mockUrl = "www.example.com/image.jpg"
+        val mockTarget = mockk<Target<Drawable>>()
+        val mockDataSource = mockk<DataSource>()
+        val mockIsFirstResource = true
+
+        every {
+            requestBuilder.listener(any<RequestListener<Drawable>>())
+        } answers {
+            firstArg<RequestListener<Drawable>>().onResourceReady(
+                mockResource,
+                mockUrl,
+                mockTarget,
+                mockDataSource,
+                mockIsFirstResource
+            )
+            requestBuilder
+        }
+
+        val actualRequestBuilder =
+            requestBuilder.listener({ resource, model, target, datasource, isFirstResource ->
+                Truth.assertThat(resource).isEqualTo(mockResource)
+                Truth.assertThat(model).isEqualTo(mockUrl)
+                Truth.assertThat(target).isEqualTo(mockTarget)
+                Truth.assertThat(datasource).isEqualTo(mockDataSource)
+                Truth.assertThat(isFirstResource).isTrue()
+                true
+            }, { exception, model, target, isFirstResource ->
+                true
+            })
+
+        Truth.assertThat(requestBuilder).isEqualTo(actualRequestBuilder)
+    }
+
+    @Test
+    fun `Should called onLoadFailed and return RequestBuilder when load resource failed with set listener`() {
+        val mockUrl = "www.example.com/image.jpg"
+        val mockException = mockk<GlideException>()
+        val mockTarget = mockk<Target<Drawable>>()
+        val mockIsFirstResource = true
+
+        every {
+            requestBuilder.listener(any<RequestListener<Drawable>>())
+        } answers {
+            firstArg<RequestListener<Drawable>>().onLoadFailed(
+                mockException,
+                mockUrl,
+                mockTarget,
+                mockIsFirstResource
+            )
+            requestBuilder
+        }
+
+        val actualRequestBuilder =
+            requestBuilder.listener({ resource, model, target, datasource, isFirstResource ->
+                true
+            }, { exception, model, target, isFirstResource ->
+                Truth.assertThat(exception).isEqualTo(mockException)
+                Truth.assertThat(model).isEqualTo(mockUrl)
+                Truth.assertThat(target).isEqualTo(mockTarget)
+                Truth.assertThat(isFirstResource).isTrue()
+                true
+            })
+
+        Truth.assertThat(requestBuilder).isEqualTo(actualRequestBuilder)
     }
 
     @Test
