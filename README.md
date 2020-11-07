@@ -1,11 +1,11 @@
-# Glide-KTX
+# Glide-KTX  [ ![Download](https://api.bintray.com/packages/champchayangkoon/OtherKTX/com.chayangkoon.champ.glide.ktx/images/download.svg) ](https://bintray.com/champchayangkoon/OtherKTX/com.chayangkoon.champ.glide.ktx/_latestVersion)
 A set of kotlin extensions for Glide image loader library.
 
 ## Gradle
 Add a dependency code to your module's build.gradle file:
 ```groovy
 dependencies {
-    implementation 'com.chayangkoon.champ:glide-ktx:1.0.0'
+    implementation 'com.chayangkoon.champ:glide-ktx:1.1.0'
 }
 ```
 And add below codes to your root project's build.gradle file:
