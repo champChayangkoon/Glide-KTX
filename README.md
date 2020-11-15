@@ -33,16 +33,24 @@ imageView.load(File("/path/image.jpg"))
 
 // And so on...
 ```
-## Custom requests
+## Customizing requests
 Requests can be customized with trailing lambda:
 ```kotlin
 imageView.load("https://www.example.com/image.jpg") {
 	transform(CircleCrop())
 }
+```
+Or if would like to shared requests:
+```kotlin
+val requestOptions: RequestOptions = RequestOptions()
+    .circleCrop()
 
-// And can be set transition with pass to second parameter
-
-imageView.load("https://www.example.com/image.jpg", withCrossFade()) {
+imageView.load("https://www.example.com/image.jpg", requestOptions = requestOptions)
+```
+And can be set transition with pass to second parameter:
+```kotlin
+imageView.load("https://www.example.com/image.jpg", DrawableTransitionOptions.withCrossFade()) {
+        placeholder(R.drawable.ic_placeholder)
 	transform(CircleCrop())
 }
 ```
@@ -52,6 +60,16 @@ In addition to load an image into an ImageView, you can use asynchronous loads i
 Glide.with(activity)
     .load("https://www.example.com/image.jpg")
     .intoCustomTarget({ resource, transition ->
+        // handle image result
+    }, {
+        // handle error drawable
+    })
+    
+// Or
+
+Glide.with(activity)
+    .load("https://www.example.com/image.jpg")
+    .intoCustomTarget(100, 100, { resource, transition ->
         // handle image result
     }, {
         // handle error drawable
@@ -70,12 +88,16 @@ Glide.with(activity)
 ## Background Threads
 To load an image on background Thread, You can use submit() and then use `getOnCoroutine()` for get image on coroutine. It will execute on background thread by default: 
 ```kotlin
+val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+    // handle error
+}
+
 val futureTarget: FutureTarget<Bitmap> = Glide.with(this)
     .asBitmap()
     .load("https://www.example.com/image.jpg")
     .submit()
 
-coroutineScope.launch {
+coroutineScope.launch(exceptionHandler) {
     val bitmap = futureTarget.getOnCoroutine()
     // handle bitmap result
 }
