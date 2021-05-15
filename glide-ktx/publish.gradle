@@ -47,7 +47,7 @@ bintray {
             name = this.version
             desc = "Version ${this.version}"
             released = new Date()
-            vcsTag = "LinkPreview-${this.version}"
+            vcsTag = "Glide-KTX-${this.version}"
         }
     }
 }
