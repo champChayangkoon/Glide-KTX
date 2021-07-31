@@ -141,8 +141,8 @@ fun ImageView.loadAny(
     return Glide.with(this)
         .load(data)
         .apply {
-            transitionOptions?.let { transition(it) }
-            requestOptions?.let { apply(it) }
+            transitionOptions?.let(::transition)
+            requestOptions?.let(::apply)
         }
         .into(this)
 }
@@ -275,7 +275,7 @@ inline fun ImageView.loadAny(
 ): ViewTarget<ImageView, Drawable> {
     return Glide.with(this)
         .load(data)
-        .apply { transitionOptions?.let { transition(it) } }
+        .apply { transitionOptions?.let(::transition)}
         .apply(RequestOptions().apply(requestOptions))
         .into(this)
 }
