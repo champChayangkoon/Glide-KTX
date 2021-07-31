@@ -30,8 +30,6 @@ import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @ExperimentalCoroutinesApi
-@RunWith(AndroidJUnit4::class)
-@Config(sdk = [Build.VERSION_CODES.P])
 internal class RequestBuilderExtTest {
     @get:Rule
     val mainCoroutineRule = MainCoroutineRule()
