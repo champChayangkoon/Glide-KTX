@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<lint>
-    <issue id="CheckResult" severity="ignore">
-        <ignore path="com.bumptech.glide.request" />
-    </issue>
-</lint>
